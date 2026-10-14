@@ -191,10 +191,13 @@ function Move(src, dst)
     local _, _, dstLocked = GetContainerItemInfo(dst.container, dst.position)
     
 	if texture and not srcLocked and not dstLocked then
-		ClearCursor()
-       	PickupContainerItem(src.container, src.position)
-		PickupContainerItem(dst.container, dst.position)
-
+		if C_Container then
+			C_Container.SwapItems(src.container, src.position, dst.container, dst.position)
+		else
+			ClearCursor()
+			PickupContainerItem(src.container, src.position)
+			PickupContainerItem(dst.container, dst.position)
+		end
 		if src.item == dst.item then
 			local count = min(src.count, itemStacks[dst.item] - dst.count)
 			src.count = src.count - count
